@@ -1,29 +1,32 @@
-import { useState, useRef } from "react";
-import audiofile from "./assets/ding.mp3";
+import { useEffect, useRef } from "react";
 import "./App.css";
 
+const AUDIO_FILEPATH = "/ding.mp3";
+
 function App() {
-  const audio = useRef<HTMLAudioElement>(null);
-  const [count, setCount] = useState(0);
+  const audioContextRef = useRef<AudioContext>(new AudioContext());
+  const audioBufferRef = useRef<null | AudioBuffer>(null);
 
-  function play() {
-    if (!audio.current) {
-      return;
+  useEffect(() => {
+    fetch(AUDIO_FILEPATH)
+      .then((res) => res.arrayBuffer())
+      .then((data) => audioContextRef.current.decodeAudioData(data))
+      .then((buffer) => (audioBufferRef.current = buffer));
+  }, []);
+
+  async function play() {
+    if (audioContextRef.current.state === "suspended") {
+      await audioContextRef.current.resume();
     }
-    audio.current.pause();
-    audio.current.currentTime = 0;
-    audio.current.play();
-  }
 
-  function ding() {
-    setCount(count + 1);
-    console.log(count + 1);
-    play();
+    const source = audioContextRef.current.createBufferSource();
+    source.buffer = audioBufferRef.current;
+    source.connect(audioContextRef.current.destination);
+    source.start(0);
   }
 
   return (
-    <div id="tap-surface" onClick={ding}>
-      <audio src={audiofile} className="hidden" controls ref={audio}></audio>
+    <div id="tap-surface" onClick={play}>
       <div className="tap-icon">🛎️</div>
     </div>
   );
