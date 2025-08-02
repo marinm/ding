@@ -20,3 +20,11 @@
 #tap-surface > * {
   user-select: none;
 }
+
+.tap-icon {
+  font-size: 4rem;
+}
+
+audio {
+  display: none;
+}
