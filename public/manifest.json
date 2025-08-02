@@ -1,0 +1,15 @@
+{
+	"short_name": "Ding",
+	"name": "Ding",
+	"icons": [
+		{
+			"src": "touch-icon.png",
+			"sizes": "300x300",
+			"type": "image/png"
+		}
+	],
+	"start_url": ".",
+	"display": "standalone",
+	"theme_color": "#222222",
+	"background_color": "#222222"
+}
