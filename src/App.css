@@ -17,8 +17,10 @@
   user-select: none;
 }
 
+#tap-surface,
 #tap-surface > * {
   user-select: none;
+  touch-action: manipulation;
 }
 
 .tap-icon {

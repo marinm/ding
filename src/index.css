@@ -6,4 +6,5 @@ body {
   display: flex;
   place-items: center;
   background-color: #222;
+  overflow: hidden;
 }
