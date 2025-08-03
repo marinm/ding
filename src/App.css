@@ -38,6 +38,7 @@ audio {
 .shaking {
   animation: shake 50ms;
   animation-iteration-count: infinite;
+  filter: brightness(1.1);
 }
 
 @keyframes shake {
