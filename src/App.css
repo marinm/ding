@@ -24,7 +24,7 @@
 }
 
 .tap-icon {
-  font-size: 4rem;
+  font-size: 6rem;
 }
 
 audio {
@@ -33,4 +33,21 @@ audio {
 
 .grayscale {
   filter: grayscale(100%);
+}
+
+.shaking {
+  animation: shake 50ms;
+  animation-iteration-count: infinite;
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(5px, 1px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-5px, 0px) rotate(0deg);
+  }
+  100% {
+    transform: translate(5px, -0px) rotate(-1deg);
+  }
 }

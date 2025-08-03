@@ -1,9 +1,22 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import { useAudioFile } from "./hooks/useAudioFile";
 
+const SHAKE_DURATION = 600;
+
 function App() {
   const { audioBufferRef, audioContextRef } = useAudioFile();
+  const [shakeTimeout, setShakeTimeout] = useState<null | number>(null);
+  const [shaking, setShaking] = useState(false);
+
+  const shake = useCallback(() => {
+    setShaking(true);
+    if (shakeTimeout) {
+      clearTimeout(shakeTimeout);
+    }
+    const newShakeTimeout = setTimeout(() => setShaking(false), SHAKE_DURATION);
+    setShakeTimeout(newShakeTimeout);
+  }, [shakeTimeout]);
 
   const play = useCallback(async () => {
     if (audioContextRef.current.state === "suspended") {
@@ -14,7 +27,8 @@ function App() {
     source.buffer = audioBufferRef.current;
     source.connect(audioContextRef.current.destination);
     source.start(0);
-  }, [audioContextRef, audioBufferRef]);
+    shake();
+  }, [audioContextRef, audioBufferRef, shake]);
 
   const onKeyDown = useCallback(
     (key: KeyboardEvent) => {
@@ -33,7 +47,7 @@ function App() {
 
   return (
     <div id="tap-surface" onPointerDown={play}>
-      <div className="tap-icon">🛎️</div>
+      <div className={`tap-icon ${shaking ? "shaking" : ""}`}>🛎️</div>
     </div>
   );
 }
