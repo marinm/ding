@@ -1,16 +1,9 @@
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  type KeyboardEventHandler,
-} from "react";
+import { useCallback, useEffect } from "react";
 import "./App.css";
-
-const AUDIO_FILEPATH = "/ding.mp3";
+import { useAudioFile } from "./hooks/useAudioFile";
 
 function App() {
-  const audioContextRef = useRef<AudioContext>(new AudioContext());
-  const audioBufferRef = useRef<null | AudioBuffer>(null);
+  const { audioBufferRef, audioContextRef } = useAudioFile();
 
   const play = useCallback(async () => {
     if (audioContextRef.current.state === "suspended") {
@@ -21,7 +14,7 @@ function App() {
     source.buffer = audioBufferRef.current;
     source.connect(audioContextRef.current.destination);
     source.start(0);
-  }, [audioContextRef]);
+  }, [audioContextRef, audioBufferRef]);
 
   const onKeyDown = useCallback(
     (key: KeyboardEvent) => {
@@ -37,13 +30,6 @@ function App() {
 
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [onKeyDown]);
-
-  useEffect(() => {
-    fetch(AUDIO_FILEPATH)
-      .then((res) => res.arrayBuffer())
-      .then((data) => audioContextRef.current.decodeAudioData(data))
-      .then((buffer) => (audioBufferRef.current = buffer));
-  }, []);
 
   return (
     <div id="tap-surface" onClick={play}>
