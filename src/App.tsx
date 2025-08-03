@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type KeyboardEventHandler } from "react";
 import "./App.css";
 
 const AUDIO_FILEPATH = "/ding.mp3";
@@ -14,7 +14,7 @@ function App() {
       .then((buffer) => (audioBufferRef.current = buffer));
   }, []);
 
-  async function play() {
+  const play = async () => {
     if (audioContextRef.current.state === "suspended") {
       await audioContextRef.current.resume();
     }
@@ -23,10 +23,16 @@ function App() {
     source.buffer = audioBufferRef.current;
     source.connect(audioContextRef.current.destination);
     source.start(0);
-  }
+  };
+
+  const onKeyDown: KeyboardEventHandler<HTMLDivElement> = (key) => {
+    if (key.code === "space") {
+      play();
+    }
+  };
 
   return (
-    <div id="tap-surface" onClick={play}>
+    <div id="tap-surface" onClick={play} onKeyDown={onKeyDown}>
       <div className="tap-icon">🛎️</div>
     </div>
   );
