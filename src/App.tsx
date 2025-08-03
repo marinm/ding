@@ -8,6 +8,7 @@ function App() {
   const { audioBufferRef, audioContextRef } = useAudioFile();
   const [shakeTimeout, setShakeTimeout] = useState<null | number>(null);
   const [shaking, setShaking] = useState(false);
+  const [ready, setReady] = useState(false);
 
   const shake = useCallback(() => {
     setShaking(true);
@@ -21,6 +22,7 @@ function App() {
   const play = useCallback(async () => {
     if (audioContextRef.current.state === "suspended") {
       await audioContextRef.current.resume();
+      setReady(true);
     }
 
     const source = audioContextRef.current.createBufferSource();
@@ -47,7 +49,13 @@ function App() {
 
   return (
     <div id="tap-surface" onPointerDown={play}>
-      <div className={`tap-icon ${shaking ? "shaking" : ""}`}>🛎️</div>
+      <div
+        className={`tap-icon ${ready ? "" : "grayscale"} ${
+          shaking ? "shaking" : ""
+        }`}
+      >
+        🛎️
+      </div>
     </div>
   );
 }
