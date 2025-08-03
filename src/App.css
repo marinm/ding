@@ -43,12 +43,12 @@ audio {
 
 @keyframes shake {
   0% {
-    transform: translate(5px, 1px) rotate(1deg);
+    transform: translate(2px, 0px);
   }
   50% {
-    transform: translate(-5px, 0px) rotate(0deg);
+    transform: translate(-2px, 0px);
   }
   100% {
-    transform: translate(5px, -0px) rotate(-1deg);
+    transform: translate(2px, 0px);
   }
 }
