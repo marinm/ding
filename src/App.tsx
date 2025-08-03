@@ -32,7 +32,7 @@ function App() {
   }, [onKeyDown]);
 
   return (
-    <div id="tap-surface" onClick={play}>
+    <div id="tap-surface" onPointerDown={play}>
       <div className="tap-icon">🛎️</div>
     </div>
   );
